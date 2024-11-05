@@ -1,5 +1,6 @@
 import Cocoa
 import FlutterMacOS
+import window_manager
 
 class MainFlutterWindow: NSWindow {
     
@@ -15,4 +16,9 @@ class MainFlutterWindow: NSWindow {
         self.flutterViewController = flutterViewController
         super.awakeFromNib()
     }
+    
+    override func order(_ place: NSWindow.OrderingMode, relativeTo otherWin: Int) {
+        super.order(place, relativeTo: otherWin)
+    }
+    
 }

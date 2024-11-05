@@ -1,8 +1,18 @@
 import Cocoa
 import FlutterMacOS
 
-@NSApplicationMain
+@main
 class AppDelegate: FlutterAppDelegate {
+    
+    @IBOutlet weak var showProperty: NSMenuItem!
+    
+    override func applicationDidBecomeActive(_ notification: Notification) {
+        super.applicationDidBecomeActive(notification)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.showProperty.state = .off
+        }
+    }
+    
     override func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return true
     }
@@ -42,4 +52,10 @@ class AppDelegate: FlutterAppDelegate {
             window.flutterViewController?.openFiles(files)
         }
     }
+    
+    @IBAction func showProperty(_ sender: Any) {
+        print("/////---showProperty-----")
+        UserDefaults.standard.setValue(true, forKey:"Property Hide")
+    }
+    
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:svgaplayer_flutter/proto/svga.pb.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:window_manager/window_manager.dart';
 import 'generated/l10n.dart';
 
 class SvgaWidget extends StatefulWidget {
@@ -42,7 +44,7 @@ class _SvgaWidgetState extends State<SvgaWidget>
     animationController = SVGAAnimationController(vsync: this);
     super.initState();
     _enableEventReceiver();
-    // loadAnimation();
+    loadAnimation(null);
   }
 
   @override
@@ -55,11 +57,20 @@ class _SvgaWidgetState extends State<SvgaWidget>
   /*
   * 加载本地资源
   * */
-  void loadAnimation(MovieEntity videoItem) async {
+  void loadAnimation(MovieEntity? videoItem) async {
     // final videoItem = await SVGAParser.shared.decodeFromURL(
     //     "https://github.com/yyued/SVGA-Samples/blob/master/angel.svga?raw=true");
     // final videoItem =
     //     await SVGAParser.shared.decodeFromAssets('images/loading.svga');
+    if (videoItem == null) {
+      return;
+    }
+    print("----------------------");
+    print(videoItem.params.viewBoxWidth);
+    print(videoItem.params.viewBoxHeight);
+    print("-----------------------");
+    windowManager.setSize(Size(max(300, videoItem.params.viewBoxWidth),
+        max(300, videoItem.params.viewBoxHeight)));
     this.videoItem = videoItem;
     animationController.videoItem = videoItem;
     animationController
@@ -68,18 +79,47 @@ class _SvgaWidgetState extends State<SvgaWidget>
     setState(() {});
   }
 
+  final TextStyle textStyle = const TextStyle(
+    color: Color.fromARGB(200, 255, 255, 255),
+    fontSize: 16,
+    fontWeight: FontWeight.w400
+  );
+
   @override
   Widget build(BuildContext context) {
     if (videoItem == null) {
       return _add();
     } else {
-      return SVGAImage(animationController);
+      return Stack(
+        children: [
+          Positioned(
+              top: 10,
+              right: 10,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                textDirection: TextDirection.rtl,
+                children: [
+                  Text("w:${videoItem!.params.viewBoxWidth}", style: textStyle,),
+                  Text("H:${videoItem!.params.viewBoxHeight}",style: textStyle),
+                  Text("fps:${videoItem!.params.fps}", style: textStyle),
+                  Text("frame:${videoItem!.params.frames}",style: textStyle),
+                ],
+              )),
+          Center(
+            child: SVGAImage(
+              animationController,
+              fit: BoxFit.fitWidth,
+            ),
+          )
+        ],
+      );
     }
   }
 
   Widget _add() {
     return Material(
       child: Container(
+        alignment: Alignment.center,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
           colors: [Colors.blue, Colors.green],
@@ -164,4 +204,8 @@ class _SvgaWidgetState extends State<SvgaWidget>
     var videoItem = await SVGAParser.shared.decodeFromBuffer(data.cast<int>());
     loadAnimation(videoItem);
   }
+
+  // Future<void> createNewWindow() async {
+  //   final newWindow = await Window
+  // }
 }

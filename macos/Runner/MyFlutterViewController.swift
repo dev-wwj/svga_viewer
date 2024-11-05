@@ -15,10 +15,10 @@ class MyFlutterViewController: FlutterViewController {
         _ = container
         
         RegisterGeneratedPlugins(registry: self)
-        if let messager = self.engine.binaryMessenger as? FlutterBinaryMessenger {
-            let channel = FlutterEventChannel(name: "com.push.data", binaryMessenger: messager)
-            channel.setStreamHandler(self)
-        }
+        let messager = self.engine.binaryMessenger
+        let channel = FlutterEventChannel(name: "com.push.data",
+                                          binaryMessenger: messager)
+        channel.setStreamHandler(self)
     }
     
     lazy var container: DragContainer = {
@@ -55,7 +55,6 @@ class MyFlutterViewController: FlutterViewController {
                     let data = try Data(contentsOf: file)
                     self?.load(data: data)
                 } catch {
-                    
                 }
             }
         }
