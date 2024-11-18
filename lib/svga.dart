@@ -1,14 +1,15 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:svgaplayer_flutter/parser.dart';
 import 'package:svgaplayer_flutter/player.dart';
 import 'package:svgaplayer_flutter/proto/svga.pb.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:window_manager/window_manager.dart';
 import 'generated/l10n.dart';
 
@@ -24,6 +25,8 @@ class _SvgaWidgetState extends State<SvgaWidget>
   StreamSubscription? _streamSubscription;
   late SVGAAnimationController animationController;
   MovieEntity? videoItem;
+  Uint8List? lottieData;
+
   void _enableEventReceiver() {
     _streamSubscription = _eventChannel.receiveBroadcastStream().listen(_listen,
         onError: (dynamic error) {
@@ -65,10 +68,6 @@ class _SvgaWidgetState extends State<SvgaWidget>
     if (videoItem == null) {
       return;
     }
-    print("----------------------");
-    print(videoItem.params.viewBoxWidth);
-    print(videoItem.params.viewBoxHeight);
-    print("-----------------------");
     windowManager.setSize(Size(max(300, videoItem.params.viewBoxWidth),
         max(300, videoItem.params.viewBoxHeight)));
     this.videoItem = videoItem;
@@ -80,16 +79,13 @@ class _SvgaWidgetState extends State<SvgaWidget>
   }
 
   final TextStyle textStyle = const TextStyle(
-    color: Color.fromARGB(200, 255, 255, 255),
-    fontSize: 16,
-    fontWeight: FontWeight.w400
-  );
+      color: Color.fromARGB(200, 255, 255, 255),
+      fontSize: 16,
+      fontWeight: FontWeight.w400);
 
   @override
   Widget build(BuildContext context) {
-    if (videoItem == null) {
-      return _add();
-    } else {
+    if (videoItem != null) {
       return Stack(
         children: [
           Positioned(
@@ -99,10 +95,14 @@ class _SvgaWidgetState extends State<SvgaWidget>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 textDirection: TextDirection.rtl,
                 children: [
-                  Text("w:${videoItem!.params.viewBoxWidth}", style: textStyle,),
-                  Text("H:${videoItem!.params.viewBoxHeight}",style: textStyle),
+                  Text(
+                    "w:${videoItem!.params.viewBoxWidth}",
+                    style: textStyle,
+                  ),
+                  Text("H:${videoItem!.params.viewBoxHeight}",
+                      style: textStyle),
                   Text("fps:${videoItem!.params.fps}", style: textStyle),
-                  Text("frame:${videoItem!.params.frames}",style: textStyle),
+                  Text("frame:${videoItem!.params.frames}", style: textStyle),
                 ],
               )),
           Center(
@@ -113,6 +113,12 @@ class _SvgaWidgetState extends State<SvgaWidget>
           )
         ],
       );
+    } else if (lottieData != null) {
+      return Stack(
+        children: [Center(child: Lottie.memory(lottieData!))],
+      );
+    } else {
+      return _add();
     }
   }
 
@@ -188,9 +194,26 @@ class _SvgaWidgetState extends State<SvgaWidget>
     if (event == null) {
       return;
     }
-    var data = event.cast<int>();
-    var videoItem = await SVGAParser.shared.decodeFromBuffer(data);
-    loadAnimation(videoItem);
+    lottieData = null;
+    videoItem = null;
+    final name = event['name'];
+    final data = event['data'];
+    Uint8List? imageBytes = base64Decode(data);
+    if (name.trim().toLowerCase().endsWith('svga')) {
+      var videoItem = await SVGAParser.shared.decodeFromBuffer(imageBytes);
+      loadAnimation(videoItem);
+    } else if (name.trim().toLowerCase().endsWith('json')) {
+      lottieData = imageBytes;
+      setState(() {});
+    }
+
+    // Map<String, dynamic> data = jsonDecode(event);
+    // print('recview....' + data.toString());
+    // var item = data.cast<FileItem>();
+    // print('---- name ' + item.name);
+    // print('---- data ' + item.data);
+    // var videoItem = await SVGAParser.shared.decodeFromBuffer(item.data);
+    // loadAnimation(videoItem);
   }
 
   void open() async {
@@ -198,14 +221,30 @@ class _SvgaWidgetState extends State<SvgaWidget>
       label: 'SVGA',
       extensions: <String>['svga', 'SVGA'],
     );
-    final XFile file =
-        (await openFile(acceptedTypeGroups: <XTypeGroup>[typeGroup])) as XFile;
+    const XTypeGroup lottieGroup = XTypeGroup(
+      label: 'lottie',
+      extensions: <String>['json', 'JSON'],
+    );
+    final XFile file = (await openFile(
+        acceptedTypeGroups: <XTypeGroup>[typeGroup, lottieGroup])) as XFile;
+    lottieData = null;
+    videoItem = null;
     Uint8List data = await file.readAsBytes();
-    var videoItem = await SVGAParser.shared.decodeFromBuffer(data.cast<int>());
-    loadAnimation(videoItem);
+    print('----name----' + file.name);
+    if (file.name.trim().toLowerCase().endsWith('svga')) {
+      var videoItem =
+          await SVGAParser.shared.decodeFromBuffer(data.cast<int>());
+      loadAnimation(videoItem);
+    } else if (file.name.trim().toLowerCase().endsWith('json')) {
+      lottieData = data;
+      setState(() {});
+    }
   }
+}
 
-  // Future<void> createNewWindow() async {
-  //   final newWindow = await Window
-  // }
+class FileItem {
+  final String name;
+  final Uint8List data;
+
+  FileItem(this.name, this.data);
 }

@@ -10,9 +10,10 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>svga</string>
+				<string>json</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>svga</string>
+			<string>Animation</string>
 			<key>CFBundleTypeRole</key>
 			<string>Viewer</string>
 			<key>LSHandlerRank</key>

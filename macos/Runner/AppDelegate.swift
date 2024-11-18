@@ -38,7 +38,7 @@ class AppDelegate: FlutterAppDelegate {
         dialog.showsHiddenFiles = true
         dialog.canCreateDirectories = true
         dialog.canChooseDirectories = true
-        dialog.allowedFileTypes = ["svga"]
+        dialog.allowedFileTypes = ["svga","json"]
         guard
             dialog.runModal() == .OK,
             let result = dialog.url

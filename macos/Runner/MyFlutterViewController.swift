@@ -8,6 +8,35 @@
 import Foundation
 import FlutterMacOS
 
+struct FileItem: Codable {
+    let name: String
+    let data: Data
+    
+    init(name: String, data: Data) {
+        self.name = name
+        self.data = data
+    }
+    
+    enum CodingKeys: CodingKey {
+        case name
+        case data
+    }
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.data = try container.decode(Data.self, forKey: .data)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.name, forKey: .name)
+        try container.encode(String(data: data.base64EncodedData(),
+                                    encoding: .ascii),
+                             forKey: .data)
+    }
+}
+
 class MyFlutterViewController: FlutterViewController {
     
     override func viewDidLoad() {
@@ -37,11 +66,25 @@ class MyFlutterViewController: FlutterViewController {
     
     var eventSink:FlutterEventSink? = nil
 
-    var dataBits: [UInt8]? = nil
+    var file: Any? = nil
     
-    func load(data: Data) {
-        dataBits = [UInt8](data)
-        self.eventSink?(self.dataBits!)
+    func sendToFlutter(file: FileItem) {
+        
+        let fileBase64 = file.data.base64EncodedString()
+        let message = ["name": file.name, "data": fileBase64]
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        do {
+            let data = try encoder.encode(file)
+            let dataBits = [UInt8](data)
+            if let eventSink {
+                eventSink(message)
+            } else {
+                self.file = message
+            }
+        } catch {
+        }
+        
     }
     
     func openFiles(_ files: [URL]) {
@@ -50,12 +93,12 @@ class MyFlutterViewController: FlutterViewController {
             guard FileManager.default.fileExists(atPath: file.path, isDirectory: &isDirectory) else {
                 continue
             }
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                do {
-                    let data = try Data(contentsOf: file)
-                    self?.load(data: data)
-                } catch {
-                }
+            do {
+                let data = try Data(contentsOf: file)
+                let name = file.relativePath
+                let item = FileItem(name: name, data: data)
+                self.sendToFlutter(file: item)
+            } catch {
             }
         }
     }
@@ -64,7 +107,10 @@ class MyFlutterViewController: FlutterViewController {
 extension MyFlutterViewController: FlutterStreamHandler {
     func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
         eventSink = events
-        events(self.dataBits)  //openFiles在前, onListen在后, 在onListen 建立成功后将 data 传输给flutter
+        //openFiles在前, onListen在后, 在onListen 建立成功后将 data 传输给flutter
+        if let file {
+            events(file)
+        }
         return nil
     }
     
