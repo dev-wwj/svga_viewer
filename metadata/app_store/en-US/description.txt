@@ -1,0 +1,5 @@
+Motion Preview is a lightweight macOS viewer for motion and image assets. Open SVGA, Lottie, PNG, JPEG, HEIC, SVG, GIF, WebP, APNG, MP4, MOV, and M4V files in focused native windows. WebM playback is attempted through the macOS system decoder and depends on the codecs available on your Mac.
+
+Inspect dimensions, frame counts, frame rate, duration, codec, and other format-specific details. Use timeline controls, frame stepping, speed, looping, zoom, and canvas backgrounds when the format supports them.
+
+Your files stay on your Mac. Motion Preview decodes resources locally and does not upload them.

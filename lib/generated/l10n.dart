@@ -63,7 +63,7 @@ class S {
   /// `Set this app as the default program for SVGA files.`
   String get tip1 {
     return Intl.message(
-      'Set this app as the default program for SVGA files.',
+      'Set this app as the default program for SVGA | Lottie files.',
       name: 'tip1',
       desc: '',
       args: [],
@@ -73,7 +73,7 @@ class S {
   /// `Click to browse local SVGA images.`
   String get tip2 {
     return Intl.message(
-      'Click to browse local SVGA images.',
+      'Click to browse local SVGA | Lottie Animation.',
       name: 'tip2',
       desc: '',
       args: [],
@@ -83,7 +83,7 @@ class S {
   /// `Drag and drop SVGA files onto this window.`
   String get tip3 {
     return Intl.message(
-      'Drag and drop SVGA files onto this window.',
+      'Drag and drop SVGA | Lottie files onto this window.',
       name: 'tip3',
       desc: '',
       args: [],

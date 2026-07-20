@@ -24,10 +24,10 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "guide": MessageLookupByLibrary.simpleMessage("Usage Guide"),
         "tip1": MessageLookupByLibrary.simpleMessage(
-            "Set this app as the default program for SVGA files."),
+            "Set this app as the default program for SVGA | Lottie files."),
         "tip2": MessageLookupByLibrary.simpleMessage(
-            "Click to browse local SVGA images."),
+            "Click to browse local SVGA | Lottie Animation."),
         "tip3": MessageLookupByLibrary.simpleMessage(
-            "Drag and drop SVGA files onto this window.")
+            "Drag and drop SVGA | Lottie files onto this window.")
       };
 }

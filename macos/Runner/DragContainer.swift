@@ -17,7 +17,7 @@ protocol DragContainerDelegate {
 class DragContainer: NSView {
     var delegate : DragContainerDelegate?
     
-    let acceptTypes = ["svga","json"]
+    let acceptTypes = Array(DocumentAccessManager.supportedExtensions)
     let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
     
     let normalAlpha: CGFloat = 0

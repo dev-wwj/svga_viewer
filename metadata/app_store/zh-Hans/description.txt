@@ -1,0 +1,5 @@
+Motion Preview 是一款轻量的 macOS 多媒体资源预览工具。支持 SVGA、Lottie、PNG、JPEG、HEIC、SVG、GIF、WebP、APNG、MP4、MOV 和 M4V。WebM 通过 macOS 系统解码器尝试播放，实际能力取决于当前 Mac 支持的编码格式。
+
+在 Inspector 中查看尺寸、帧数、帧率、时长、编码器等格式信息。对于支持的格式，可使用时间轴、逐帧、速度、循环、缩放和画布背景控制。
+
+资源仅在本机解码，不会上传到网络。

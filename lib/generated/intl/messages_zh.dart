@@ -23,8 +23,9 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "guide": MessageLookupByLibrary.simpleMessage("使用指南"),
-        "tip1": MessageLookupByLibrary.simpleMessage("将本APP设置为svga默认程序"),
-        "tip2": MessageLookupByLibrary.simpleMessage("点击查找本地svga图片"),
-        "tip3": MessageLookupByLibrary.simpleMessage("拖动svga到此窗口")
+        "tip1":
+            MessageLookupByLibrary.simpleMessage("将本APP设置为svga | lottie默认程序"),
+        "tip2": MessageLookupByLibrary.simpleMessage("点击查找本地svga | lottie图片"),
+        "tip3": MessageLookupByLibrary.simpleMessage("拖动svga | lottie到此窗口")
       };
 }

@@ -1,0 +1,1 @@
+SVGA,Lottie,animation,preview,SVG,GIF,WebP,video,media,viewer

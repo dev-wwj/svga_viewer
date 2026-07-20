@@ -7,12 +7,13 @@ class MainFlutterWindow: NSWindow {
     var flutterViewController: MyFlutterViewController?
     
     override func awakeFromNib() {
-        let flutterViewController = MyFlutterViewController()
+        let flutterViewController = MyFlutterViewController(project: nil)
         let windowFrame = self.frame
         self.contentViewController = flutterViewController
+        self.backgroundColor = NSColor.windowBackgroundColor
+        self.isOpaque = true
         self.setFrame(windowFrame, display: true)
         
-        RegisterGeneratedPlugins(registry: flutterViewController)
         self.flutterViewController = flutterViewController
         super.awakeFromNib()
     }

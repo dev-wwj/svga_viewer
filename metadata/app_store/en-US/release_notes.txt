@@ -1,0 +1,9 @@
+Motion Preview has been redesigned as a focused macOS preview workspace.
+
+- Preview SVGA, Lottie, images, SVG, animated images, and common video formats.
+- Open each resource in its own window, sized to match the content when possible.
+- Inspect format-specific dimensions, animation, video, and file details.
+- Control playback, frame stepping, speed, looping, zoom, and canvas backgrounds when supported.
+- Quickly reopen resources from the new Recent list.
+- Use Motion Preview in English or Simplified Chinese based on the macOS language.
+- Improved cold launch, document opening, window stability, and narrow-window layouts.

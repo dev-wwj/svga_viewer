@@ -1,5 +1,5 @@
 name: svger
-description: "A .svga preview App"
+description: "A macOS workspace for previewing motion and media assets"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.0.0+1
+version: 2.0.1+260720
 
 environment:
   sdk: '>=3.3.0-191.0.dev <4.0.0'
@@ -42,7 +42,11 @@ dependencies:
   extended_image: ^7.0.2
   window_manager: ^0.4.2
   lottie: ^3.0.0
-#  intl: ^0.18.1
+  intl: ^0.20.0
+  macos_ui: ^2.2.0
+  flutter_svg: ^2.0.9
+  video_player: ^2.9.5
+  shared_preferences: ^2.5.3
 #  flutter_localization: ^0.1.14
 #  sp_util: ^2.0.3
 
@@ -62,6 +66,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  generate: true
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -74,6 +79,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
     - images/loading.svga
     - images/favourite_app_icon.json
+    - images/motion_preview_app_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

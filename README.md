@@ -1,16 +1,21 @@
-# svger
+# Motion Preview
 
-A new Flutter project.
+macOS 优先的 Flutter 轻量多媒体预览器。每个资源使用独立窗口打开，窗口按图片/视频资源尺寸在屏幕范围内初始化；支持 SVGA、Lottie、图片/动画图片、SVG 和 MP4/MOV/M4V。WebM 仅使用系统解码能力，失败时显示可恢复错误。
 
-## Getting Started
+## 文档
 
-This project is a starting point for a Flutter application.
+- [项目说明](DOCUMENTATION.md)
+- [项目知识图谱](KNOWLEDGE_GRAPH.md)
+- [技术支持 / Support](SUPPORT.md)
+- [产品介绍 / Marketing](MARKETING.md)
 
-A few resources to get you started if this is your first Flutter project:
+## 开发
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run -d macos
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+仓库已启用本地 CodeGraph 索引。代码变更后运行 `codegraph sync .`，并可使用 `codegraph explore`、`codegraph node` 和 `codegraph impact` 查询调用关系与影响面。
